@@ -8,12 +8,12 @@ module.exports = {
 
     getAccountByUserName: async (username) => {
         const account = await db.getByValue(tableName, "username", username);
-        return account;
+        return account[0];
     },
 
     getAccountById: async (id) => {
         const account = await db.getByValue(tableName, "account_id", id);
-        return account;
+        return account[0];
     },
 
     addAccount: async (account) => {

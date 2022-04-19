@@ -2,7 +2,8 @@ const taskModel = require("../models/taskModel");
 
 exports.getAllTasks = async (req, res, next) => {
     const tasks = await taskModel.getAllTasksByAccId(req.userId);
-    return res.status(200).json(tasks);
+    const returnTasks = tasks.filter(task => !task.is_deleted);
+    return res.status(200).json(returnTasks);
 }
 
 exports.updateTask = async (req, res, next) => {
@@ -11,8 +12,8 @@ exports.updateTask = async (req, res, next) => {
         const task = req.body.task;
         const upTask = await taskModel.updateTask({
             content: task.content,
-            account_id: task.account_id,
-            date_create: task.date_create,
+            // account_id: task.account_id,
+            // date_create: task.date_create,
             deadline: task.deadline,
             important: task.important,
             is_finish: task.is_finish,
@@ -28,14 +29,12 @@ exports.updateTask = async (req, res, next) => {
 }
 
 exports.addTask = async (req, res, next) => {
-    console.log(req.body)
+    console.log(req.body.task)
     if (req.body && req.body.task) {
         const newTask = {
             ...req.body.task,
             account_id: req.userId,
             date_create: new Date().toLocaleString('en-US'),
-            deadline: new Date().toLocaleString('en-US'),
-            important: false,
             is_finish: false,
             is_deleted: false
         }

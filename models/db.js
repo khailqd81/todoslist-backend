@@ -37,6 +37,17 @@ exports.getByValue = async (tableName, col, value) => {
     }
 }
 
+exports.getByValueOrder = async (tableName, col, value, orderCol) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema });
+    const qStr = pgp.as.format("SELECT * FROM ${table} WHERE ${col~}=${value} ORDER BY ${orderCol~} ASC", { table, col, value,orderCol });
+    try {
+        const result = await db.any(qStr);
+        return result
+    } catch (error) {
+        console.log("error in db/getByValue: ", error)
+    }
+}
+
 exports.add = async (tableName, data) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema });
     const qStr = pgp.helpers.insert(data, Object.keys(data), table) + " RETURNING *";

@@ -38,13 +38,13 @@ exports.signup = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
     if (req.body && req.body.username && req.body.password) {
         const account = await accountModel.getAccountByUserName(req.body.username);
-        if (account[0]) {
-            const checkPass = await bcrypt.compare(req.body.password, account[0].password);
+        if (account) {
+            const checkPass = await bcrypt.compare(req.body.password, account.password);
             if (checkPass) {
-                const accessToken = jwt.sign({ id: account[0].account_id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
+                const accessToken = jwt.sign({ id: account.account_id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
                 return res.status(200).json({
                     accessToken,
-                    fullname: account[0].fullname
+                    fullname: account.fullname
                 })
             } else {
                 return res.status(202).json({
@@ -73,8 +73,8 @@ exports.getAccountById = async (req, res, next) => {
     if (req.userId) {
         const account = await accountModel.getAccountById(req.userId);
         return res.status(200).json({
-            username: account[0].usename,
-            fullname: account[0].fullname
+            username: account.usename,
+            fullname: account.fullname
         });
     }
     return res.status(202).json({

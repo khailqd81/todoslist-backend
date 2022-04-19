@@ -18,6 +18,5 @@ exports.isSignIn = async (req, res, next) => {
                 message: "Error verify access token"
             })
         }
-
     }
 }
