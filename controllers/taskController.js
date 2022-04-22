@@ -10,14 +10,16 @@ exports.updateTask = async (req, res, next) => {
 
     if (req.body && req.body.task) {
         const task = req.body.task;
+        let newTask = {...task};
+        delete newTask.task_id;
+        console.log(newTask)
         const upTask = await taskModel.updateTask({
-            content: task.content,
-            // account_id: task.account_id,
-            // date_create: task.date_create,
-            deadline: task.deadline,
-            important: task.important,
-            is_finish: task.is_finish,
-            is_deleted: task.is_deleted
+            // content: task.content,
+            // deadline: task.deadline,
+            // important: task.important,
+            // is_finish: task.is_finish,
+            // is_deleted: task.is_deleted
+            ...newTask
         }, task.task_id);
         return res.status(200).json(upTask);
     } else {
