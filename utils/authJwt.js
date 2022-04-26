@@ -19,4 +19,7 @@ exports.isSignIn = async (req, res, next) => {
             })
         }
     }
+    return res.status(202).json({
+        message: "Empty request headers."
+    })
 }
