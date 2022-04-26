@@ -5,11 +5,14 @@ const pgp = require("pg-promise")({
 const schema = "public"
 
 const cn = {
-    host: 'localhost',
-    port: 5432,
-    database: 'todo_list',
-    user: 'postgres',
-    password: "123456"
+    host: process.env.PG_HOST,
+    port: process.env.PG_PORT,
+    database: process.env.PG_DB,
+    user: process.env.PG_USER,
+    password: process.env.PG_PASSWORD,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 }
 
 const db = pgp(cn)
@@ -39,7 +42,7 @@ exports.getByValue = async (tableName, col, value) => {
 
 exports.getByValueOrder = async (tableName, col, value, orderCol) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema });
-    const qStr = pgp.as.format("SELECT * FROM ${table} WHERE ${col~}=${value} ORDER BY ${orderCol~} ASC", { table, col, value,orderCol });
+    const qStr = pgp.as.format("SELECT * FROM ${table} WHERE ${col~}=${value} ORDER BY ${orderCol~} ASC", { table, col, value, orderCol });
     try {
         const result = await db.any(qStr);
         return result
